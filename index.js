@@ -1,35 +1,61 @@
-setInterval(() => {
-  // create snow
-  const snow = document.createElement("div");
+/**
+ * Sets the snowflake's X position
+ * @returns random X position
+ */
+const randomX = () => {
+  return Math.floor(Math.random() * window.innerWidth);
+};
 
-  // set styles
-  snow.style.position = "absolute";
-  snow.style.width = "10px";
-  snow.style.height = "10px";
-  snow.style.backgroundColor = "white";
-  snow.style.borderRadius = "50%";
-  snow.style.zIndex = 40;
+/**
+ * Sets the snowflake's Y position
+ * @returns random Y position
+ */
+const randomY = () => {
+  return Math.floor(Math.random() * window.innerHeight);
+};
 
-  // add snow class
-  snow.classList.add("snow");
+/**
+ * Sets the snowflake's size
+ * @returns random size
+ */
+const randomSize = (min, max) => {
+  return Math.random() * (max - min) + min;
+};
 
-  // positioning the snow
-  let topPosition = Math.floor(Math.random() * 10);
+/**
+ * Sets the snowflake's CSS properties
+ * @param {*} flake
+ */
+const setCSSProperties = (flake) => {
+  flake.style.position = "absolute";
+  flake.style.backgroundColor = "white";
+  flake.style.borderRadius = "50%";
+  flake.style.width = `${snowFlakeSize}px`;
+  flake.style.height = `${snowFlakeSize}px`;
+};
+
+let snowFlakeSize = randomSize(1, 9);
+const snowFlakeCount = 100;
+
+for (let i = 1; i <= snowFlakeCount; i++) {
+  snowFlakeSize = randomSize(3, 7);
+  let snowFlakeX = randomX();
+  let snowFlakeY = randomY();
+
+  let snowFlake = document.createElement("div");
+  setCSSProperties(snowFlake);
+
+  document.body.append(snowFlake);
 
   setInterval(() => {
-    snow.style.top = `${topPosition}px`;
-    topPosition += 20;
-  }, 100);
+    snowFlake.style.top = `${snowFlakeY}px`;
+    snowFlake.style.left = `${snowFlakeX}px`;
 
-  snow.style.left = `${Math.floor(Math.random() * window.innerWidth)}px`;
-
-  // add to the body
-  document.body.appendChild(snow);
-
-  if (topPosition > window.innerHeight) {
-    let snows = document.getElementsByClassName("snow");
-    snows.forEach((element) => {
-      element.remove();
-    });
-  }
-}, 100);
+    if (snowFlakeY > window.innerHeight) {
+      snowFlakeX = randomX();
+      snowFlakeY = randomY();
+    }
+    
+    snowFlakeY++;
+  }, 1);
+}
